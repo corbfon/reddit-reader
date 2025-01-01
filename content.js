@@ -1,5 +1,5 @@
 function copyToClipboard(text) {
-  const textarea = document.createElement("textarea");
+  let textarea = document.createElement("textarea");
   textarea.value = text;
   document.body.appendChild(textarea);
   textarea.select();
@@ -8,33 +8,33 @@ function copyToClipboard(text) {
 }
 
 // Initialize an array to hold the comments hierarchy
-const commentsHierarchy = [];
+let commentsHierarchy = [];
 
 // Get all top-level parent elements with the tag "shreddit-comment"
-const parentElements = document.querySelectorAll(
+let parentElements = document.querySelectorAll(
   'shreddit-comment:not([slot^="children-"])'
 );
 
 // Function to process a shreddit-comment element recursively
 function processCommentElement(element) {
   // Get the author from the "author" attribute
-  const author = element.getAttribute("author");
+  let author = element.getAttribute("author");
 
   // Get the comment text from the "md" element
-  const mdElement = element.querySelector(".md");
-  const comment = mdElement
+  let mdElement = element.querySelector(".md");
+  let comment = mdElement
     ? Array.from(mdElement.getElementsByTagName("p"))
         .map((p) => p.textContent)
         .join("\n")
     : "";
 
   // Get the replies (nested shreddit-comment elements)
-  const replies = Array.from(
+  let replies = Array.from(
     element.querySelectorAll('shreddit-comment[slot^="children-"]')
   );
 
   // Process replies recursively
-  const processedReplies = replies.map((reply) => processCommentElement(reply));
+  let processedReplies = replies.map((reply) => processCommentElement(reply));
 
   // Return the comment object
   return {
@@ -53,5 +53,5 @@ parentElements.forEach((parentElement) => {
 console.log(commentsHierarchy);
 
 // Convert commentsHierarchy to a JSON string and copy to clipboard
-const jsonComments = JSON.stringify(commentsHierarchy, null, 2);
+let jsonComments = JSON.stringify(commentsHierarchy, null, 2);
 copyToClipboard(jsonComments);
