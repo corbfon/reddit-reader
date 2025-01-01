@@ -1,12 +1,17 @@
 function copyToClipboard(text) {
-  let textarea = document.createElement("textarea");
-  textarea.value = text;
-  document.body.appendChild(textarea);
-  textarea.select();
-  document.execCommand("copy");
-  document.body.removeChild(textarea);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        console.log("Text copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy text: ", err);
+      });
+  } else {
+    console.error("Clipboard API not supported.");
+  }
 }
-
 // Initialize an array to hold the comments hierarchy
 let commentsHierarchy = [];
 
